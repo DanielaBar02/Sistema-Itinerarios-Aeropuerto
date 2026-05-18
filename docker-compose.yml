@@ -1,0 +1,49 @@
+version: "3.9"
+
+services:
+
+  airport-service:
+    build:
+      context: ./airport-service
+      dockerfile: Dockerfile
+    container_name: airport-service
+    ports:
+      - "8000:8000"
+    networks:
+      - itineracol-network
+    restart: unless-stopped
+
+  itinerary-service:
+    build:
+      context: ./itinerary-service
+      dockerfile: Dockerfile
+    container_name: itinerary-service
+    ports:
+      - "8001:8001"
+    volumes:
+      - itinerary-db:/app/data
+    environment:
+      - AIRPORT_SERVICE_URL=http://airport-service:8000
+    depends_on:
+      - airport-service
+    networks:
+      - itineracol-network
+    restart: unless-stopped
+
+  frontend:
+    image: nginx:alpine
+    container_name: frontend
+    ports:
+      - "3000:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
+    networks:
+      - itineracol-network
+    restart: unless-stopped
+
+networks:
+  itineracol-network:
+    driver: bridge
+
+volumes:
+  itinerary-db:
