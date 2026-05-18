@@ -1,5 +1,5 @@
 # Sistema de Itinerarios Personales
-### Arquitectura de Microservicios · Universidad Central · Arquitectura de Sistemas II
+### Arquitectura de Microservicios · Universidad Central
 
 ---
 
